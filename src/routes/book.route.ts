@@ -1,21 +1,42 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/Home.vue';
-import BookList from '@/components/BookList.vue';
-import BookDetail from '@/components/BookDetail.vue';
-import AddBook from '@/components/AddBook.vue';
-import NotFound from '@/views/NotFound.vue';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import Home from '../views/Home.vue';
+import BookList from '../components/BookList.vue';
+import BookDetail from '../components/BookDetail.vue';
+import AddBook from '../components/AddBook.vue';
+import NotFound from '../views/NotFound.vue';
 
-const routes = [
-  { path: '/', component: Home },
-  { path: '/books', component: BookList },
-  { path: '/books/:id', component: BookDetail },
-  { path: '/add-book', component: AddBook },
-  { path: '/:pathMatch(.*)*', component: NotFound },
+const routes: Array<RouteRecordRaw> = [
+  { 
+    path: '/', 
+    name: 'home',
+    component: Home 
+  },
+  { 
+    path: '/books', 
+    name: 'books',
+    component: BookList 
+  },
+  { 
+    path: '/books/:id', 
+    name: 'book-detail',
+    component: BookDetail,
+    props: true 
+  },
+  { 
+    path: '/add-book', 
+    name: 'add-book',
+    component: AddBook 
+  },
+  { 
+    path: '/:pathMatch(.*)*', 
+    name: 'not-found',
+    component: NotFound 
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
 });
 
 export default router;

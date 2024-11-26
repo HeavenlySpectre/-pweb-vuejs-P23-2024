@@ -3,21 +3,39 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="mx-5 flex flex-col items-center lg:flex-row lg:items-start lg:pr-8 lg:max-h-screen">
-
-    <div class="flex flex-col items-center lg:flex-row lg:items-start lg:flex-wrap">
-
-      <nav class="flex-auto flex-nowrap w-full text-center mt-8 lg:text-center lg:mt-4 lg:ml-[-1rem] lg:text-base bg">
-        <RouterLink to="/" class="text-center m-5 px-4 hover:bg-transparent">Home</RouterLink>
-        <RouterLink to="/books" class="text-center m-5 px-4 hover:bg-transparent">Daftar Buku</RouterLink>
-        <RouterLink to="/add-book" class="text-center m-5 px-4 hover:bg-transparent">Tambah Buku</RouterLink>
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-4">
+      <nav class="flex justify-center py-4 space-x-4">
+        <RouterLink 
+          to="/" 
+          class="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          :class="{ 'font-bold text-blue-600': $route.path === '/' }"
+        >
+          Home
+        </RouterLink>
+        <RouterLink 
+          to="/books" 
+          class="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          :class="{ 'font-bold text-blue-600': $route.path.startsWith('/books') }"
+        >
+          Daftar Buku
+        </RouterLink>
+        <RouterLink 
+          to="/add-book" 
+          class="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          :class="{ 'font-bold text-blue-600': $route.path === '/add-book' }"
+        >
+          Tambah Buku
+        </RouterLink>
       </nav>
     </div>
   </header>
 
-  <RouterView />
+  <main class="container mx-auto px-4 py-8">
+    <RouterView />
+  </main>
 </template>
 
-<style scoped>
+<style>
+@import './assets/main.css';
 </style>
-

@@ -1,60 +1,132 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import apiService from '@/services/api.service';
+
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  publisher: string;
+  publishedDate: string;
+  description: string;
+  category: string;
+  qty: number;
+  initialQty: number;
+  coverImage?: string;
+}
+
+const route = useRoute();
+const router = useRouter();
+const book = ref<Book | null>(null);
+const loading = ref(true);
+const error = ref<string | null>(null);
+const showDeleteConfirm = ref(false);
+
+const fetchBook = async () => {
+  try {
+    loading.value = true;
+    const response = await apiService.getBook(route.params.id as string);
+    book.value = response.data;
+  } catch (err) {
+    error.value = 'Gagal memuat detail buku';
+    console.error('Error fetching book:', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const deleteBook = async () => {
+  try {
+    await apiService.deleteBook(route.params.id as string);
+    router.push('/books');
+  } catch (err) {
+    error.value = 'Gagal menghapus buku';
+    console.error('Error deleting book:', err);
+  }
+};
+
+onMounted(fetchBook);
+</script>
+
 <template>
-  <div class="p-4">
-    <div v-if="book" class="bg-white shadow-md rounded p-6">
-      <h1 class="text-2xl font-bold mb-4">{{ book.title }}</h1>
-      <p class="text-gray-700 mb-2">Penulis: {{ book.author }}</p>
-      <p class="text-gray-700 mb-2">Kategori: {{ book.category }}</p>
-      <p class="text-gray-700 mb-2">Status: {{ book.available ? 'Tersedia' : 'Dipinjam' }}</p>
+  <div class="container mx-auto p-4">
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Memuat detail buku...</p>
     </div>
-    <div v-else class="text-center text-gray-500">
-      <p>Loading...</p>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-8">
+      <p class="text-red-500">{{ error }}</p>
+      <button @click="fetchBook" class="mt-4 btn-secondary">
+        Coba Lagi
+      </button>
     </div>
-    <button @click="deleteBook" class="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700">
-      Hapus Buku
-    </button>
+
+    <!-- Book Details -->
+    <div v-else-if="book" class="max-w-3xl mx-auto">
+      <div class="card">
+        <div class="flex justify-between items-start">
+          <h1 class="text-3xl font-bold mb-4">{{ book.title }}</h1>
+          <button @click="showDeleteConfirm = true" class="btn-danger">
+            Hapus Buku
+          </button>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Book Cover -->
+          <div v-if="book.coverImage" class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+            <img :src="book.coverImage" :alt="book.title" class="w-full h-full object-cover">
+          </div>
+
+          <!-- Book Info -->
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-gray-500">Penulis</h3>
+              <p class="font-medium">{{ book.author }}</p>
+            </div>
+            <div>
+              <h3 class="text-gray-500">Penerbit</h3>
+              <p class="font-medium">{{ book.publisher }}</p>
+            </div>
+            <div>
+              <h3 class="text-gray-500">Tanggal Terbit</h3>
+              <p class="font-medium">{{ new Date(book.publishedDate).toLocaleDateString('id-ID') }}</p>
+            </div>
+            <div>
+              <h3 class="text-gray-500">Kategori</h3>
+              <p class="font-medium">{{ book.category }}</p>
+            </div>
+            <div>
+              <h3 class="text-gray-500">Stok</h3>
+              <p class="font-medium">{{ book.qty }}/{{ book.initialQty }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <h3 class="text-gray-500 mb-2">Deskripsi</h3>
+          <p class="text-gray-700">{{ book.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div v-if="showDeleteConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h2 class="text-xl font-bold mb-4">Konfirmasi Penghapusan</h2>
+        <p class="text-gray-600">Apakah Anda yakin ingin menghapus buku ini?</p>
+        <div class="mt-6 flex justify-end gap-4">
+          <button @click="showDeleteConfirm = false" class="btn-secondary">
+            Batal
+          </button>
+          <button @click="deleteBook" class="btn-danger">
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-  
-  <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import axios from 'axios';
-  
-  interface Book {
-    id: number;
-    title: string;
-    author: string;
-    category: string;
-    available: boolean;
-  }
-  
-  export default defineComponent({
-    setup() {
-      const route = useRoute();
-      const router = useRouter();
-      const book = ref<Book | null>(null);
-  
-      const fetchBook = async () => {
-        try {
-          const response = await axios.get(`http://localhost:4000/books/${route.params.id}`);
-          book.value = response.data as Book;
-        } catch (error) {
-          console.error('Error fetching book:', error);
-        }
-      };
-  
-      const deleteBook = async () => {
-        try {
-          await axios.delete(`http://localhost:4000/books/${route.params.id}`);
-          router.push('/books');
-        } catch (error) {
-          console.error('Error deleting book:', error);
-        }
-      };
-  
-      onMounted(fetchBook);
-  
-      return { book, deleteBook };
-    },
-  });
-  </script>

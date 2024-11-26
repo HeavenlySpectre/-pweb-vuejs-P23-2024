@@ -1,41 +1,98 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import apiService from '@/services/api.service';
+
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  publisher: string;
+  qty: number;
+  category: string;
+}
+
+const books = ref<Book[]>([]);
+const loading = ref(true);
+const error = ref<string | null>(null);
+const router = useRouter();
+
+const fetchBooks = async () => {
+  try {
+    loading.value = true;
+    const response = await apiService.getBooks();
+    books.value = response.data.books;
+  } catch (err) {
+    error.value = 'Gagal memuat daftar buku';
+    console.error('Error fetching books:', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchBooks);
+</script>
+
 <template>
-  <div class="text-center container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Daftar Buku</h1>
-    <ul v-if="books.length > 0" class="list-disc pl-5">
-      <li v-for="book in books" :key="book.id" class="mb-2">
-        <router-link :to="`/books/${book.id}`" class="text-blue-500 hover:underline">{{ book.title }}</router-link> - {{ book.author }}
-      </li>
-    </ul>
-    <p v-else class="m-5 text-gray-500">Tidak ada buku yang tersedia.</p>
-    <button class="bg-blue-500 text-white px-4 py-2 rounded mb-4" @click="$router.push('/add-book')">Tambah Buku</button>
+  <div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Daftar Buku</h1>
+      <button 
+        @click="$router.push('/add-book')"
+        class="btn-primary"
+      >
+        Tambah Buku
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Memuat daftar buku...</p>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-8">
+      <p class="text-red-500">{{ error }}</p>
+      <button @click="fetchBooks" class="mt-4 btn-secondary">
+        Coba Lagi
+      </button>
+    </div>
+
+    <!-- Books List -->
+    <div v-else-if="books.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="book in books" :key="book._id" class="card hover:shadow-lg transition-shadow">
+        <h3 class="text-xl font-semibold mb-2">{{ book.title }}</h3>
+        <p class="text-gray-600">{{ book.author }}</p>
+        <p class="text-gray-500">{{ book.publisher }}</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+            {{ book.category }}
+          </span>
+          <span :class="book.qty > 0 ? 'text-green-600' : 'text-red-600'">
+            {{ book.qty > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
+          </span>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <router-link 
+            :to="`/books/${book._id}`"
+            class="btn-primary flex-1 text-center"
+          >
+            Detail
+          </router-link>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else class="text-center py-8">
+      <p class="text-gray-500">Tidak ada buku yang tersedia.</p>
+      <button 
+        @click="$router.push('/add-book')"
+        class="mt-4 btn-primary"
+      >
+        Tambah Buku Baru
+      </button>
+    </div>
   </div>
 </template>
-  
-  <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
-  import axios from 'axios';
-
-  interface Book {
-    id: number;
-    title: string;
-    author: string;
-  }
-  
-  export default defineComponent({
-    setup() {
-      const books = ref<Book[]>([]);
-      const fetchBooks = async () => {
-        try {
-          const response = await axios.get('http://localhost:4000/books');
-          books.value = response.data as Book[];
-        } catch (error) {
-          console.error('Error fetching books:', error);
-        }
-      };
-  
-      onMounted(fetchBooks);
-  
-      return { books };
-    },
-  });
-  </script>
