@@ -5,10 +5,6 @@
       <input v-model="title" placeholder="Judul Buku" required class="w-full p-2 border border-gray-300 rounded" />
       <input v-model="author" placeholder="Pengarang" required class="w-full p-2 border border-gray-300 rounded" />
       <input v-model="category" placeholder="Kategori" required class="w-full p-2 border border-gray-300 rounded" />
-      <label class="flex items-center space-x-2">
-        <input type="checkbox" v-model="available" class="form-checkbox" />
-        <span>Tersedia</span>
-      </label>
       <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Tambah</button>
     </form>
   </div>
