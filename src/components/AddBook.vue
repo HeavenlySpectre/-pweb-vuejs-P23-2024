@@ -6,6 +6,8 @@ import apiService from '@/services/api.service';
 const router = useRouter();
 const loading = ref(false);
 const error = ref<string | null>(null);
+const imageFile = ref<File | null>(null);
+const imagePreview = ref<string | null>(null);
 
 const bookData = ref({
   title: '',
@@ -14,20 +16,56 @@ const bookData = ref({
   publishedDate: '',
   description: '',
   category: '',
-  initialQty: 1,
-  coverImage: ''
+  initialQty: 1
 });
+
+const handleImageChange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      error.value = 'Ukuran file terlalu besar. Maksimal 5MB.';
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.match('image.*')) {
+      error.value = 'File harus berupa gambar.';
+      return;
+    }
+
+    imageFile.value = file;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      imagePreview.value = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 const submitForm = async () => {
   try {
+    if (!imageFile.value) {
+      error.value = 'Harap pilih gambar cover buku.';
+      return;
+    }
+
     loading.value = true;
     error.value = null;
+
+    const formData = new FormData();
+    formData.append('coverImage', imageFile.value);
     
-    await apiService.addBook({
-      ...bookData.value,
-      qty: bookData.value.initialQty
+    // Append other book data
+    Object.entries(bookData.value).forEach(([key, value]) => {
+      formData.append(key, value.toString());
     });
-    
+
+    await apiService.addBook(formData);
     router.push('/books');
   } catch (err) {
     error.value = 'Gagal menambahkan buku';
@@ -43,112 +81,154 @@ const submitForm = async () => {
     <div class="max-w-2xl mx-auto">
       <h1 class="text-3xl font-bold mb-6">Tambah Buku Baru</h1>
 
-      <form @submit.prevent="submitForm" class="card space-y-6">
+      <form @submit.prevent="submitForm" class="bg-white rounded-lg shadow-md p-6">
         <!-- Error Alert -->
-        <div v-if="error" class="bg-red-50 text-red-500 p-4 rounded-lg">
+        <div v-if="error" class="mb-6 bg-red-50 text-red-500 p-4 rounded-lg">
           {{ error }}
         </div>
 
-        <!-- Form Fields -->
-        <div class="space-y-4">
-          <div>
-            <label class="label">Judul Buku</label>
-            <input 
-              v-model="bookData.title"
-              type="text"
-              required
-              class="input"
-              placeholder="Masukkan judul buku"
-            >
+        <!-- Image Upload -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Cover Buku <span class="text-red-500">*</span>
+          </label>
+          <div class="flex items-center space-x-4">
+            <div class="w-32 h-44 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+              <img 
+                v-if="imagePreview"
+                :src="imagePreview"
+                alt="Book cover preview"
+                class="w-full h-full object-cover"
+              >
+              <span v-else class="text-gray-400 text-sm text-center px-2">
+                Pilih gambar cover
+              </span>
+            </div>
+            <div class="flex-1">
+              <input 
+                type="file"
+                accept="image/*"
+                class="w-full"
+                @change="handleImageChange"
+                required
+              >
+              <p class="mt-1 text-sm text-gray-500">
+                PNG, JPG, atau WEBP (max. 5MB)
+              </p>
+            </div>
           </div>
+        </div>
 
-          <div>
-            <label class="label">Penulis</label>
-            <input 
-              v-model="bookData.author"
-              type="text"
-              required
-              class="input"
-              placeholder="Masukkan nama penulis"
-            >
-          </div>
+        <!-- Book Title -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Judul Buku <span class="text-red-500">*</span>
+          </label>
+          <input 
+            v-model="bookData.title"
+            type="text"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Masukkan judul buku"
+          >
+        </div>
 
-          <div>
-            <label class="label">Penerbit</label>
-            <input 
-              v-model="bookData.publisher"
-              type="text"
-              required
-              class="input"
-              placeholder="Masukkan nama penerbit"
-            >
-          </div>
+        <!-- Author -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Penulis <span class="text-red-500">*</span>
+          </label>
+          <input 
+            v-model="bookData.author"
+            type="text"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Masukkan nama penulis"
+          >
+        </div>
 
-          <div>
-            <label class="label">Tanggal Terbit</label>
-            <input 
-              v-model="bookData.publishedDate"
-              type="date"
-              required
-              class="input"
-            >
-          </div>
+        <!-- Publisher -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Penerbit <span class="text-red-500">*</span>
+          </label>
+          <input 
+            v-model="bookData.publisher"
+            type="text"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Masukkan nama penerbit"
+          >
+        </div>
 
-          <div>
-            <label class="label">Kategori</label>
-            <input 
-              v-model="bookData.category"
-              type="text"
-              required
-              class="input"
-              placeholder="Masukkan kategori buku"
-            >
-          </div>
+        <!-- Published Date -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Tanggal Terbit <span class="text-red-500">*</span>
+          </label>
+          <input 
+            v-model="bookData.publishedDate"
+            type="date"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+        </div>
 
-          <div>
-            <label class="label">Jumlah Buku</label>
-            <input 
-              v-model.number="bookData.initialQty"
-              type="number"
-              required
-              min="1"
-              class="input"
-            >
-          </div>
+        <!-- Category -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Kategori <span class="text-red-500">*</span>
+          </label>
+          <input 
+            v-model="bookData.category"
+            type="text"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Masukkan kategori buku"
+          >
+        </div>
 
-          <div>
-            <label class="label">URL Cover Buku (Opsional)</label>
-            <input 
-              v-model="bookData.coverImage"
-              type="url"
-              class="input"
-              placeholder="Masukkan URL gambar cover buku"
-            >
-          </div>
+        <!-- Initial Quantity -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Jumlah Buku <span class="text-red-500">*</span>
+          </label>
+          <input 
+            v-model.number="bookData.initialQty"
+            type="number"
+            required
+            min="1"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+        </div>
 
-          <div>
-            <label class="label">Deskripsi</label>
-            <textarea 
-              v-model="bookData.description"
-              required
-              class="input h-32"
-              placeholder="Masukkan deskripsi buku"
-            ></textarea>
-          </div>
+        <!-- Description -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Deskripsi <span class="text-red-500">*</span>
+          </label>
+          <textarea 
+            v-model="bookData.description"
+            required
+            rows="4"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Masukkan deskripsi buku"
+          ></textarea>
         </div>
 
         <!-- Submit Button -->
         <div class="flex justify-end gap-4">
           <button 
-            type="button" 
+            type="button"
             @click="router.push('/books')"
-            class="btn-secondary"
+            class="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            :disabled="loading"
           >
             Batal
           </button>
           <button 
             type="submit"
-            class="btn-primary"
+            class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             :disabled="loading"
           >
             {{ loading ? 'Menyimpan...' : 'Simpan Buku' }}

@@ -1,24 +1,6 @@
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosError } from 'axios';
 import axios from 'axios';
-
-interface Book {
-  _id: string;
-  title: string;
-  author: string;
-  publishedDate: Date;
-  publisher: string;
-  description: string;
-  coverImage: string;
-  category: string;
-  initialQty: number;
-  qty: number;
-}
-
-interface ApiResponse<T> {
-  status: 'success' | 'failed' | 'error';
-  message: string;
-  data: T;
-}
+import type { Book, ApiResponse } from '../models/types.ts';
 
 class ApiService {
   private api: AxiosInstance;
@@ -29,31 +11,74 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
+      timeout: 10000,
     });
+
+    this.api.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        if (error.code === 'ECONNREFUSED') {
+          console.error('Server is not running. Please start the backend server.');
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
-  // Get all books
   async getBooks() {
-    const response = await this.api.get<ApiResponse<Book[]>>('/book');
-    return response.data;
+    try {
+      const response = await this.api.get<ApiResponse<Book[]>>('/book');
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
   }
 
-  // Get a single book
   async getBook(id: string) {
-    const response = await this.api.get<ApiResponse<Book>>(`/book/${id}`);
-    return response.data;
+    try {
+      const response = await this.api.get<ApiResponse<Book>>(`/book/${id}`);
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
   }
 
-  // Add a new book
-  async addBook(book: Omit<Book, '_id'>) {
-    const response = await this.api.post<ApiResponse<Book>>('/book', book);
-    return response.data;
+  async addBook(formData: FormData) {
+    try {
+      const response = await this.api.post<ApiResponse<Book>>('/book', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
   }
 
-  // Delete a book
   async deleteBook(id: string) {
-    const response = await this.api.delete<ApiResponse<null>>(`/book/${id}`);
-    return response.data;
+    try {
+      const response = await this.api.delete<ApiResponse<null>>(`/book/${id}`);
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
+  }
+
+  private handleError(error: AxiosError) {
+    if (error.code === 'ECONNREFUSED') {
+      console.error('Cannot connect to the server. Please make sure the backend is running.');
+    } else if (error.response) {
+      console.error('Server responded with error:', error.response.data);
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Error setting up request:', error.message);
+    }
   }
 }
 
