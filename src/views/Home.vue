@@ -1,5 +1,5 @@
 <template>
-  <div class="home text-center mt-12">
+  <div class="home text-center mt-12 p-5">
     <h1 class="text-3xl font-bold">Selamat Datang di Katalog Perpustakaan</h1>
     <p class="mt-4 text-lg">Kelola koleksi buku Anda dengan mudah. Jelajahi, tambahkan, atau perbarui informasi buku di perpustakaan.</p>
     <div class="actions mt-8">
