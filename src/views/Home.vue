@@ -8,7 +8,7 @@ const navigateToAddBook = () => router.push('/add-book');
 </script>
 
 <template>
-  <div class="home flex items-center justify-center min-h-screen pb-5 overflow-hidden">
+  <div class="home flex items-center justify-center mt-48 pb-5 overflow-hidden">
     <div class="max-w-3xl text-center mx-auto my-auto">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
         Sistem Manejemen Buku

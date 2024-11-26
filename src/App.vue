@@ -4,7 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <div class="flex flex-col md:flex-row relative">
-    <aside class="bg-white shadow w-full md:w-60 h-auto md:h-screen p-4 md:fixed">
+    <aside class="bg-white shadow w-full md:w-60 h-auto md:h-screen p-4 pt-10 md:fixed">
       <nav class="flex flex-col space-y-2 items-center md:items-start">
         <RouterLink 
           to="/" 

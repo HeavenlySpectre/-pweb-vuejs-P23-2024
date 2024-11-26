@@ -8,6 +8,7 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 const imageFile = ref<File | null>(null);
 const imagePreview = ref<string | null>(null);
+const isDarkMode = ref(false);
 
 const bookData = ref({
   title: '',
@@ -108,18 +109,18 @@ const submitForm = async () => {
               <input 
                 type="file"
                 accept="image/*"
-                class="w-full"
+                class="w-full mx-3"
                 @change="handleImageChange"
                 required
               >
-              <p class="mt-1 text-xs text-gray-500">
+              <p class="mt-1 mx-3 text-xs text-gray-500">
                 PNG, JPG, atau WEBP (max. 5MB)
               </p>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Book Title -->
           <div class="mb-3">
             <label class="block text-sm font-medium text-gray-700 mb-1">

@@ -41,9 +41,7 @@ onMounted(fetchBooks);
       <button 
         @click="$router.push('/add-book')"
         class="flex items-center bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-       <!-- Menambahkan icon menggunakan Font Awesome -->
-       <i class="fas fa-plus mr-2"></i> Tambah Buku
+        >Tambah Buku
       </button>
     </div>
 
@@ -103,7 +101,9 @@ onMounted(fetchBooks);
         class="mt-4 btn-primary"
       >
         Tambah Buku Baru
+        
       </button>
     </div>
+    
   </div>
 </template>
