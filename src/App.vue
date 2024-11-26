@@ -3,37 +3,37 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4">
-      <nav class="flex justify-center py-4 space-x-4">
+  <div class="flex flex-col md:flex-row relative">
+    <aside class="bg-white shadow w-full md:w-60 h-auto md:h-screen p-4 md:fixed">
+      <nav class="flex flex-col space-y-2 items-center md:items-start">
         <RouterLink 
           to="/" 
-          class="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          class="px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           :class="{ 'font-bold text-blue-600': $route.path === '/' }"
         >
           Home
         </RouterLink>
         <RouterLink 
           to="/books" 
-          class="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          class="px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           :class="{ 'font-bold text-blue-600': $route.path.startsWith('/books') }"
         >
           Daftar Buku
         </RouterLink>
         <RouterLink 
           to="/add-book" 
-          class="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          class="px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           :class="{ 'font-bold text-blue-600': $route.path === '/add-book' }"
         >
           Tambah Buku
         </RouterLink>
       </nav>
-    </div>
-  </header>
+    </aside>
 
-  <main class="container mx-auto px-4 py-8">
-    <RouterView />
-  </main>
+    <main class="flex-1 container mx-auto px-6 py-8 md:ml-60">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style>

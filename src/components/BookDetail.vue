@@ -8,7 +8,7 @@ interface Book {
   title: string;
   author: string;
   publisher: string;
-  publishedDate: string;
+  publishedDate: Date;
   description: string;
   category: string;
   qty: number;

@@ -10,6 +10,7 @@ interface Book {
   publisher: string;
   qty: number;
   category: string;
+  coverImage?: string;
 }
 
 const books = ref<Book[]>([]);
@@ -21,7 +22,7 @@ const fetchBooks = async () => {
   try {
     loading.value = true;
     const response = await apiService.getBooks();
-    books.value = response.data.books;
+    books.value = response.data;
   } catch (err) {
     error.value = 'Gagal memuat daftar buku';
     console.error('Error fetching books:', err);
