@@ -11,7 +11,7 @@ import { RouterLink, RouterView } from 'vue-router'
           class="px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           :class="{ 'font-bold text-blue-600': $route.path === '/' }"
         >
-          Home
+          Beranda
         </RouterLink>
         <RouterLink 
           to="/books" 

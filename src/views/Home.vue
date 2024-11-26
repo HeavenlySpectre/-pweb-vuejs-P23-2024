@@ -8,13 +8,13 @@ const navigateToAddBook = () => router.push('/add-book');
 </script>
 
 <template>
-  <div class="home flex items-center justify-center min-h-screen p-5 overflow-hidden">
+  <div class="home flex items-center justify-center min-h-screen pb-5 overflow-hidden">
     <div class="max-w-3xl text-center mx-auto my-auto">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-        Selamat Datang di Katalog Perpustakaan
+        Sistem Manejemen Buku
       </h1>
       <p class="text-lg md:text-xl text-gray-600 mb-8">
-        Kelola koleksi buku Anda dengan mudah. Jelajahi, tambahkan, atau perbarui informasi buku di perpustakaan.
+        Halo! Selamat datang di sistem manajemen buku.
       </p>
       <div class="flex flex-col sm:flex-row justify-center gap-4">
         <button 
@@ -33,3 +33,9 @@ const navigateToAddBook = () => router.push('/add-book');
     </div>
   </div>
 </template>
+
+<style>
+body {
+  overflow: hidden;
+}
+</style>
