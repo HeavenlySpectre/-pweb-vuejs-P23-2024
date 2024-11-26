@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Base URL of your REST API
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000/api', // Replace with your API's base URL
+  baseURL: 'http://localhost:4000/api', // Replace with your API's base URL
   headers: {
     'Content-Type': 'application/json',
   },

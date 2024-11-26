@@ -1,21 +1,23 @@
 <template>
-    <div>
-      <h1>Tambah Buku</h1>
-      <form @submit.prevent="submitForm">
-        <input v-model="title" placeholder="Judul Buku" required />
-        <input v-model="author" placeholder="Pengarang" required />
-        <input v-model="category" placeholder="Kategori" required />
-        <label>
-          <input type="checkbox" v-model="available" /> Tersedia
-        </label>
-        <button type="submit">Tambah</button>
-      </form>
-    </div>
-  </template>
+  <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Tambah Buku</h1>
+    <form @submit.prevent="submitForm" class="space-y-4">
+      <input v-model="title" placeholder="Judul Buku" required class="w-full p-2 border border-gray-300 rounded" />
+      <input v-model="author" placeholder="Pengarang" required class="w-full p-2 border border-gray-300 rounded" />
+      <input v-model="category" placeholder="Kategori" required class="w-full p-2 border border-gray-300 rounded" />
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" v-model="available" class="form-checkbox" />
+        <span>Tersedia</span>
+      </label>
+      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Tambah</button>
+    </form>
+  </div>
+</template>
   
   <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import api from '@/services/api.service';
+  import axios from 'axios';
+  
   
   export default defineComponent({
     setup() {
@@ -26,8 +28,17 @@
   
       const submitForm = async () => {
         try {
-          await api.addBook({ title: title.value, author: author.value, category: category.value, available: available.value });
-          alert('Buku berhasil ditambahkan!');
+          const response = await axios.post('http://localhost:4000/books', {
+            title: title.value,
+            author: author.value,
+            category: category.value,
+            available: available.value
+          });
+          if (response.status === 201) {
+            alert('Buku berhasil ditambahkan!');
+          } else {
+            alert('Gagal menambahkan buku.');
+          }
         } catch (error) {
           console.error('Error adding book:', error);
         }
@@ -37,4 +48,3 @@
     },
   });
   </script>
-  
