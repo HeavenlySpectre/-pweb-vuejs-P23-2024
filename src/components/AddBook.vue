@@ -78,11 +78,12 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div class="container mx-auto p-2">
+  <div class="container mx-auto p-2 bg-gray-50">
     <div class="max-w-2xl mx-auto">
-      <h1 class="text-2xl font-bold mb-4">Tambah Buku Baru</h1>
-
       <form @submit.prevent="submitForm" class="bg-white rounded-lg shadow-md p-4">
+        <!-- Judul -->
+        <h1 class="text-2xl font-bold mb-4">Tambah Buku Baru</h1>
+
         <!-- Error Alert -->
         <div v-if="error" class="mb-4 bg-red-50 text-red-500 p-2 rounded-lg">
           {{ error }}
@@ -223,18 +224,17 @@ const submitForm = async () => {
         <div class="flex justify-end gap-2">
           <button 
             type="button"
-            @click="router.push('/books')"
-            class="px-3 py-1 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            :disabled="loading"
+            class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+            @click="router.back()"
           >
             Batal
           </button>
           <button 
             type="submit"
-            class="px-3 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             :disabled="loading"
+            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {{ loading ? 'Menyimpan...' : 'Simpan Buku' }}
+            {{ loading ? 'Mengirim...' : 'Tambah Buku' }}
           </button>
         </div>
       </form>

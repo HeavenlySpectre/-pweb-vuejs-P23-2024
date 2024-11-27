@@ -35,14 +35,14 @@ onMounted(fetchBooks);
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container mx-auto p-4 bg-gray-50">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold">Daftar Buku</h1>
       <button 
-      @click="$router.push('/add-book')"
-      class="flex items-center justify-center bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 hover:border-gray-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        @click="$router.push('/add-book')"
+        class="flex items-center justify-center bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 hover:border-gray-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
       >
-      Tambah Buku
+        Tambah Buku
       </button>
     </div>
 
@@ -102,9 +102,7 @@ onMounted(fetchBooks);
         class="mt-4 btn-primary"
       >
         Tambah Buku Baru
-        
       </button>
     </div>
-    
   </div>
 </template>
