@@ -15,7 +15,7 @@ const navigateToAddBook = () => {
 </script>
 
 <template>
-  <div class="home flex items-center justify-center bg-gray-50">
+    <div class="home flex items-center justify-center mt-48 pb-5 overflow-hidden">
     <div class="max-w-3xl text-center mx-auto my-auto">
       <h1 class="text-4xl font-bold text-gray-800 mb-6">
         Sistem Manajemen Buku
@@ -42,8 +42,8 @@ const navigateToAddBook = () => {
 </template>
 
 <style>
-.home {
-  min-height: 100vh;
-  padding: 20px;
+body {
+  background-color: #f9fafb;
+  overflow: hidden;
 }
 </style>
