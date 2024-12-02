@@ -96,12 +96,6 @@ onMounted(fetchBooks);
     <!-- Empty State -->
     <div v-else class="text-center py-8">
       <p class="text-gray-500">Tidak ada buku yang tersedia.</p>
-      <button 
-        @click="$router.push('/add-book')"
-        class="mt-4 btn-primary"
-      >
-        Tambah Buku Baru
-      </button>
     </div>
   </div>
 </template>
