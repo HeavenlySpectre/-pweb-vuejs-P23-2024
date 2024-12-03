@@ -4,17 +4,22 @@ import { ref } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 
 const showGuide = ref(false)
-const showSidebar = ref(false)
+const showHeader = ref(false)
 </script>
 
 <template>
   <div class="flex flex-col md:flex-row relative">
-    <button @click="showSidebar = !showSidebar" class="md:hidden p-4">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-      </svg>
-    </button>
-    <aside :class="{'hidden': !showSidebar, 'block': showSidebar}" class="bg-white shadow w-fit md:w-52 h-auto md:h-screen p-4 pt-10 md:fixed flex flex-col justify-between md:block">
+    <header class="md:hidden bg-white shadow w-full p-4 flex justify-between items-center">
+      <button @click="showHeader = !showHeader" class="p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+      <button v-if="!showHeader" @click="showGuide = true" class="p-2">
+        Panduan
+      </button>
+    </header>
+    <aside :class="{'hidden': !showHeader, 'block': showHeader}" class="bg-white shadow w-full md:w-52 h-auto md:h-screen p-4 pt-10 md:fixed flex flex-col justify-between md:block">
       <nav class="flex flex-col space-y-2 items-center md:items-start">
         <RouterLink 
           to="/" 
@@ -37,11 +42,11 @@ const showSidebar = ref(false)
         >
           Tambah Buku
         </RouterLink>
-      </nav>
-      <button @click="showGuide = true" class="w-fit px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors mt-4 text-left"
+        <button @click="showGuide = true" class="w-fit px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors mt-4 text-left md:mt-auto"
         :class="{ 'font-bold text-blue-600': showGuide }">
         Panduan
       </button>
+      </nav>
     </aside>
 
     <main class="flex-1 container mx-auto px-6 py-8 md:ml-60">
