@@ -39,7 +39,7 @@ onMounted(fetchBooks);
       <h1 class="text-3xl font-bold">Daftar Buku</h1>
       <button 
         @click="$router.push('/add-book')"
-        class="btn-primary"
+        class="btn-primary flex items-center bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         Tambah Buku
       </button>
