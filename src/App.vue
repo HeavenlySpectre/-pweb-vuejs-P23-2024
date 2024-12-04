@@ -54,7 +54,7 @@ const showHeader = ref(false)
     </main>
 
     <div v-if="showGuide" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full m-4">
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Panduan Pengguna</h2>
         <p class="text-lg text-gray-600 mb-4">
         Berikut adalah panduan singkat untuk menggunakan sistem manajemen buku:
