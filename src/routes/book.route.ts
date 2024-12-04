@@ -6,31 +6,31 @@ import AddBook from '../components/AddBook.vue';
 import NotFound from '../views/NotFound.vue';
 
 const routes: Array<RouteRecordRaw> = [
-  { 
-    path: '/', 
+  {
+    path: '/',
     name: 'home',
-    component: Home 
+    component: Home
   },
-  { 
-    path: '/books', 
+  {
+    path: '/books',
     name: 'books',
-    component: BookList 
+    component: BookList
   },
-  { 
-    path: '/books/:id', 
+  {
+    path: '/books/:id',
     name: 'book-detail',
     component: BookDetail,
-    props: true 
+    props: true
   },
-  { 
-    path: '/add-book', 
+  {
+    path: '/add-book',
     name: 'add-book',
-    component: AddBook 
+    component: AddBook
   },
-  { 
-    path: '/:pathMatch(.*)*', 
+  {
+    path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: NotFound 
+    component: NotFound
   }
 ];
 

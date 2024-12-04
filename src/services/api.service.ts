@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosError } from 'axios';
 import axios from 'axios';
-import type { Book, ApiResponse } from '../models/types.ts';
+import type { Book, ApiResponse } from '../models/types';
 
 class ApiService {
   private api: AxiosInstance;
@@ -59,9 +59,57 @@ class ApiService {
     }
   }
 
+  async updateBook(id: string, formData: FormData) {
+    try {
+      const response = await this.api.put<ApiResponse<Book>>(`/book/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
+  }
+
   async deleteBook(id: string) {
     try {
       const response = await this.api.delete<ApiResponse<null>>(`/book/${id}`);
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
+  }
+
+  async updateBookCover(id: string, formData: FormData) {
+    try {
+      const response = await this.api.patch<ApiResponse<Book>>(`/book/${id}/cover`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
+  }
+
+  async borrowBook(id: string) {
+    try {
+      const response = await this.api.post<ApiResponse<{ currentQty: number }>>(`/mechanism/borrow/${id}`);
+      return response.data;
+    } catch (error) {
+      this.handleError(error as AxiosError);
+      throw error;
+    }
+  }
+
+  async returnBook(id: string) {
+    try {
+      const response = await this.api.post<ApiResponse<{ currentQty: number }>>(`/mechanism/return/${id}`);
       return response.data;
     } catch (error) {
       this.handleError(error as AxiosError);
