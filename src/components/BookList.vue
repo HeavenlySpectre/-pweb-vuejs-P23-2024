@@ -34,7 +34,7 @@ onMounted(fetchBooks);
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container mx-auto p-4 h-screen">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold">Daftar Buku</h1>
       <button 
@@ -60,23 +60,25 @@ onMounted(fetchBooks);
     </div>
 
     <!-- Books List -->
-    <div v-else-if="books.length > 0" class="overflow-y-auto h-96">
+    <div v-else-if="books.length > 0" class="overflow-y-auto" id="item-container">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div v-for="book in books" :key="book._id" class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div v-for="book in books" :key="book._id" class="bg-white rounded-lg shadow-md overflow-hidden p-1 flex flex-col my-4">
           <!-- Book Cover Image -->
-          <div class="aspect-w-3 aspect-h-4">
+          <div class="w-full h-64 mb-4 flex-shrink-0">
             <img 
               :src="book.coverImage || '/default-book-cover.png'"
               :alt="book.title"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-cover object-top"
             >
           </div>
           
           <!-- Book Info -->
-          <div class="p-4">
-            <h3 class="text-xl font-semibold mb-2">{{ book.title }}</h3>
-            <p class="text-gray-600">{{ book.author }}</p>
-            <p class="text-gray-500">{{ book.publisher }}</p>
+          <div class="flex-grow p-2 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-semibold mb-2">{{ book.title }}</h3>
+              <p class="text-gray-600">{{ book.author }}</p>
+              <p class="text-gray-500">{{ book.publisher }}</p>
+            </div>
             <div class="mt-4 flex justify-between items-center">
               <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
                 {{ book.category }}
@@ -107,3 +109,8 @@ onMounted(fetchBooks);
     </div>
   </div>
 </template>
+<style>
+  #item-container {
+    height: 610px
+  }
+</style>

@@ -78,19 +78,19 @@ onMounted(fetchBook);
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="md:flex">
           <!-- Book Cover -->
-          <div class="md:w-1/3">
-            <div class="relative pt-[140%]">
+          <div class="md:w-1/3 w-full bg-slate-900">
+            <div class="relative pb-[140%] md:pb-0 md:h-full flex items-center justify-center">
               <img 
                 :src="getImageUrl(book.coverImage)"
                 :alt="book.title"
-                class="absolute top-0 left-0 w-full h-full object-cover"
+                class="max-w-full max-h-full object-cover object-center"
                 @error="handleImageError"
               >
             </div>
           </div>
 
           <!-- Book Info -->
-          <div class="md:w-2/3 p-6">
+          <div class="md:w-2/3 w-full p-6">
             <div class="flex justify-between items-start">
               <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ book.title }}</h1>
               <button 
