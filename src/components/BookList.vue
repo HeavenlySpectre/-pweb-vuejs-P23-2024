@@ -60,36 +60,38 @@ onMounted(fetchBooks);
     </div>
 
     <!-- Books List -->
-    <div v-else-if="books.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="book in books" :key="book._id" class="bg-white rounded-lg shadow-md overflow-hidden">
-        <!-- Book Cover Image -->
-        <div class="aspect-w-3 aspect-h-4">
-          <img 
-            :src="book.coverImage || '/default-book-cover.png'"
-            :alt="book.title"
-            class="w-full h-full object-cover"
-          >
-        </div>
-        
-        <!-- Book Info -->
-        <div class="p-4">
-          <h3 class="text-xl font-semibold mb-2">{{ book.title }}</h3>
-          <p class="text-gray-600">{{ book.author }}</p>
-          <p class="text-gray-500">{{ book.publisher }}</p>
-          <div class="mt-4 flex justify-between items-center">
-            <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-              {{ book.category }}
-            </span>
-            <span :class="book.qty > 0 ? 'text-green-600' : 'text-red-600'">
-              {{ book.qty > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
-            </span>
+    <div v-else-if="books.length > 0" class="overflow-y-auto h-96">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-for="book in books" :key="book._id" class="bg-white rounded-lg shadow-md overflow-hidden">
+          <!-- Book Cover Image -->
+          <div class="aspect-w-3 aspect-h-4">
+            <img 
+              :src="book.coverImage || '/default-book-cover.png'"
+              :alt="book.title"
+              class="w-full h-full object-cover"
+            >
           </div>
-          <router-link 
-            :to="`/books/${book._id}`"
-            class="mt-4 block text-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
-            Detail
-          </router-link>
+          
+          <!-- Book Info -->
+          <div class="p-4">
+            <h3 class="text-xl font-semibold mb-2">{{ book.title }}</h3>
+            <p class="text-gray-600">{{ book.author }}</p>
+            <p class="text-gray-500">{{ book.publisher }}</p>
+            <div class="mt-4 flex justify-between items-center">
+              <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                {{ book.category }}
+              </span>
+              <span :class="book.qty > 0 ? 'text-green-600' : 'text-red-600'">
+                {{ book.qty > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
+              </span>
+            </div>
+            <router-link 
+              :to="`/books/${book._id}`"
+              class="mt-4 block text-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Detail
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
