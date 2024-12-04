@@ -62,7 +62,7 @@ onMounted(fetchBooks);
     <!-- Books List -->
     <div v-else-if="books.length > 0" class="overflow-y-auto" id="item-container">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div v-for="book in books" :key="book._id" class="bg-white rounded-lg shadow-md overflow-hidden p-1 flex flex-col my-4">
+        <div v-for="book in books" :key="book._id" class="bg-white rounded-lg shadow-md overflow-auto p-1 flex flex-col my-4">
           <!-- Book Cover Image -->
           <div class="w-full h-64 mb-4 flex-shrink-0">
             <img 
@@ -111,6 +111,6 @@ onMounted(fetchBooks);
 </template>
 <style>
   #item-container {
-    height: 610px
+    height: 600px
   }
 </style>
